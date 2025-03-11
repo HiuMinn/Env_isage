@@ -72,3 +72,37 @@ def main_mutation(l_parents, schema, var_fusion = 0, var_bruit = 0, nb_fils=4):
         elif num == 3:
             l_courants = fusion_unif_hyper_sphere(l_courants, nb_fils)
     return l_courants
+
+
+# test via une visualisation de la distribution de 1000 fils à partir de 5 parents en 2D:
+
+if __name__== '__main__':
+
+    import matplotlib.pyplot as plt
+
+    def plot_evolution(initial, transforme, titre):
+        plt.figure(figsize=(8, 6))
+        plt.scatter(initial[:, 0], initial[:, 1], color='blue', label='parents')
+        transforme = np.array(transforme)
+        plt.scatter(transforme[:, 0], transforme[:, 1], color='red', label='fils')
+        plt.legend()
+        plt.title(titre)
+        plt.xlabel("Dimension 1")
+        plt.ylabel("Dimension 2")
+        plt.show()
+
+    l_v = np.random.rand(5, 2)
+    print(l_v)
+
+    transforme_lognormal = main_mutation(l_v, [0], 1, 0.1, nb_fils=1000)
+    transforme_normal = main_mutation(l_v, [1], 0.001, 0.1, nb_fils=1000)
+    transforme_sphere = main_mutation(l_v, [3], nb_fils=1000)
+    transforme_bruit = main_mutation(l_v, [2], 0.1, 0.1)
+
+    plot_evolution(l_v, transforme_lognormal, "Fusion Poids Log-Normal")
+    plot_evolution(l_v, transforme_normal, "Fusion Poids Normal")
+    plot_evolution(l_v, transforme_bruit, "Bruitage")
+    plot_evolution(l_v, transforme_sphere, "shpere")
+
+
+# le shéma de mutation le plus pertinent semble être fusion_poids_lognormal + bruitage (ou l'inverse)
