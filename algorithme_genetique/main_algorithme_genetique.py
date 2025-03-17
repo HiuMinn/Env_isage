@@ -94,15 +94,5 @@ if __name__== '__main__':
     l_v = np.random.rand(5, 2)
     print(l_v)
 
-    transforme_lognormal = main_mutation(l_v, [0], 1, 0.1, nb_fils=1000)
-    transforme_normal = main_mutation(l_v, [1], 0.001, 0.1, nb_fils=1000)
-    transforme_sphere = main_mutation(l_v, [3], nb_fils=1000)
-    transforme_bruit = main_mutation(l_v, [2], 0.1, 0.1)
-
-    plot_evolution(l_v, transforme_lognormal, "Fusion Poids Log-Normal")
-    plot_evolution(l_v, transforme_normal, "Fusion Poids Normal")
-    plot_evolution(l_v, transforme_bruit, "Bruitage")
-    plot_evolution(l_v, transforme_sphere, "shpere")
-
-
-# le shéma de mutation le plus pertinent semble être fusion_poids_lognormal + bruitage (ou l'inverse)
+    transforme_d1coup = main_mutation(l_v, [0,2], 1, 0, nb_fils=1000)
+    plot_evolution(l_v,transforme_d1coup, "transfo d'un coup")
