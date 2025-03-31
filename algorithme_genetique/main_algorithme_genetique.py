@@ -30,6 +30,7 @@ def fusion_poids_lognormal(l_parents, sigma, nb_fils = 4):
 def fusion_poids_normal(l_parents, sigma, nb_fils = 4):
     """
     Fusionner les individus avec des poids tirés suivi par la loi normale
+
     :param l_parents: listes des individus choisis pour fusionner
     :type l_parents: array_like
     :param sigma: sigma des poids suivi par la loi normale
@@ -56,6 +57,7 @@ def fusion_poids_normal(l_parents, sigma, nb_fils = 4):
 def bruitage(l_parents, sigma):
     """
     Introduire la mutation sur chaque individu choisi avec une ditribution de loi normale
+
     :param l_parents: liste des individus choisis pour la mutation
     :type l_parents: array_like
     :param sigma: la variance de mutation suivi par la loi normale
@@ -78,6 +80,7 @@ def bruitage(l_parents, sigma):
 def fusion_unif_hyper_sphere(l_parents, nb_fils = 4):
     """
     Fusionner les individus avec des poids tirés aléatoirement pour générer un hyper-sphere
+
     :param l_parents: listes des individus choisis pour fusionner
     :type l_parents: list
     :param nb_fils: nombre de fils après la fusion. Défaut est 4 (nombre d'image à générer)
@@ -104,6 +107,7 @@ def fusion_unif_hyper_sphere(l_parents, nb_fils = 4):
 def main_mutation(l_parents, schema, var_fusion = 0, var_bruit = 0, nb_fils=4):
     """
     Pipeline pour fusionner et faire la mutation sur l'ensemble des individus choisis
+
     :param l_parents: listes des individus choisis pour la mutation
     :type l_parents: array_like
     :param schema: l'étape de la fusion et de la mutation
