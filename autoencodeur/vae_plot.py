@@ -17,7 +17,7 @@ celeba_folder = r"D:\Datasets\celeba\img_align_celeba"
 test_image_path = os.path.join(celeba_folder, test_images[0])
 
 # Charger le modèle VAE pré-entraîné
-vae_model_path = r"c:\Users\gauti\Documents\4A\S2\Projet4BIM\projet-4bim\autoencodeur\vae_model_epoch_30.pth" # Chemin sur ma machine
+vae_model_path = r"c:\Users\gauti\Documents\4A\S2\Projet4BIM\projet-4bim\autoencodeur\vae_final.pth" # Chemin sur ma machine
 if not os.path.exists(vae_model_path):
     raise FileNotFoundError(f"Model file not found: {vae_model_path}")
 
