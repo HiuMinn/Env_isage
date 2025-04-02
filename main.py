@@ -9,6 +9,11 @@ import interface_graphique as ig
 import torch
 import autoencodeur as ae
 
+def get_one_img()
+
+def clear_tmp():
+    pass
+
 def add_to_tmp(img):
     pass
 
@@ -16,7 +21,7 @@ def add_to_tmp(img):
 def clear_tmp():
     pass
 
-def add_dict(key, value):
+def add_to_dict(key, value):
     pass
 
 
@@ -26,9 +31,9 @@ def replace_20_first_img_in_directory(nb=20):
     """
     clear_tmp()
     for i in range(nb):
-        img = get_img()
+        img = get_one_img()
         add_to_tmp(img)
-        dict_encoded[f"{i}.png"] = ae.encode(img)
+        add_dict
         
     return dict_encoded
 
