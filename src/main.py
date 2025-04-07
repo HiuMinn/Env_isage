@@ -2,40 +2,41 @@ import sys
 sys.path.append("./interface_graphique/")
 sys.path.append("./autoencodeur/")
 sys.path.append("./algorithme_genetique/")
+
 import numpy as np
 from PIL import Image
-import algorithme_genetique as ag
-import interface_graphique as ig
-import torch
-import autoencodeur as ae
+
+from algorithme_genetique import main_algorithme_genetique as ag
+#from interface_graphique import test7 as ig
+from autoencodeur import vae_plot as ae
 import json
 
 import os
 import random
 import shutil
 
-FILENAME = "./tmp/dict_vect.txt"
+FILENAME = "src/tmp/dict_vect.txt"
 
 def get_one_img():
-    file = os.listdir("/mount_point/celeba_filtered/")
+    file = os.listdir("src/data")
     #file = os.listdir("D:/Users/elisa/INFO7_BS/datasets/celeba_filtered")
     chosen_img = random.choice(file)
     return chosen_img
 
 def add_to_tmp(img, j):
-    source = f"/mount_point/celeba_filtered/{img}"
+    source = f"src/data/{img}"
     #source = f"D:/Users/elisa/INFO7_BS/datasets/celeba_filtered/{img}"
     if j < 10 : 
         name = f"00{j}"
         
     else : 
         name = f"0{j}"
-    destination = f"./tmp/{name}.png"
+    destination = f"src/tmp/{name}.png"
     shutil.copy(source, destination)
-    return f"{name}}.png" #name
+    return f"{name}.png" #name
 
 def clear_tmp():
-    folder = "./tmp"
+    folder = "src/tmp"
     for file in os.listdir(folder):
         file_path = os.path.join(folder, file)
         os.remove(file_path) 
@@ -83,11 +84,12 @@ def replace_20_first_img_in_directory(nb=20):
             img = get_one_img()
 
         i = add_to_tmp(img, j)
-        add_to_dict(i,encode(img)) 
+        add_to_dict(i,ae.encode(img)) 
 
 
 def generate_img(l_of_one_img_name, var):
-    l_vec_son = ag.bruitage([dict_encoded[l_of_one_img_name[0]]], sigma = var) # remplacé par main_mutation si besoin
+    img_vec_dict = read_dict()
+    l_vec_son = ag.bruitage([img_vec_dict[l_of_one_img_name[0]]], sigma = var) # remplacé par main_mutation si besoin
     for vec in l_vec_son:
         img = ae.decode(vec)
         i = add_to_tmp(img)
@@ -107,9 +109,10 @@ def combine_img(l_of_img_names,var):
 
 
 if __name__=='__main__':
-    app = ig.QApplication(sys.argv)
+    """app = ig.QApplication(sys.argv)
     window = ig.WelcomeScreen()
     window.show()
     sys.exit(app.exec())
     with open(FILENAME, "w") as f: #vider le fichier
-        pass
+        pass"""
+    replace_20_first_img_in_directory()
