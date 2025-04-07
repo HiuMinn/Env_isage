@@ -11,6 +11,9 @@ dependencies:
   - torchaudio
   - PyQt6
   - matplotlib
+  - scikit-learn
+  - torch
+  - torchvision
   - pip
   - pip:
       - requests
