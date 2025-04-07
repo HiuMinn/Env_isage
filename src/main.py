@@ -10,19 +10,43 @@ import torch
 import autoencodeur as ae
 import json
 
+import os
+import random
+import shutil
+
 FILENAME = "./tmp/dict_vect.txt"
+
 def get_one_img():
-    pass
+    file = os.listdir("/mount_point/celeba_filtered/")
+    #file = os.listdir("D:/Users/elisa/INFO7_BS/datasets/celeba_filtered")
+    chosen_img = random.choice(file)
+    return chosen_img
+
+def add_to_tmp(img, j):
+    source = f"/mount_point/celeba_filtered/{img}"
+    #source = f"D:/Users/elisa/INFO7_BS/datasets/celeba_filtered/{img}"
+    if j < 10 : 
+        name = f"00{j}"
+        
+    else : 
+        name = f"0{j}"
+    destination = f"./tmp/{name}.png"
+    shutil.copy(source, destination)
+    return f"{name}}.png" #name
+
 def clear_tmp():
-    pass
+    folder = "./tmp"
+    for file in os.listdir(folder):
+        file_path = os.path.join(folder, file)
+        os.remove(file_path) 
 
-def add_to_tmp(img):
-    pass
-
-
-def clear_tmp():
-    pass
-
+def already_chosen_img(img, chosen_img_set): 
+    if img in chosen_img_set : 
+        return True 
+    else : 
+        chosen_img_set.add(img)
+        return False 
+    
 def add_to_dict(key, value):
     """
     Mettre a jour le dictionnaire dans le fichier
@@ -51,10 +75,15 @@ def replace_20_first_img_in_directory(nb=20):
     mets 20 img avec les bons noms : les indexes 1,2,...,21 dans le dossier
     """
     clear_tmp()
-    for _ in range(nb):
+    chosen_img_set = set()
+    for j in range(nb):
         img = get_one_img()
-        i = add_to_tmp(img)
-        add_to_dict(i,encode(img))
+
+        while already_chosen_img(img, chosen_img_set):
+            img = get_one_img()
+
+        i = add_to_tmp(img, j)
+        add_to_dict(i,encode(img)) 
 
 
 def generate_img(l_of_one_img_name, var):
