@@ -38,6 +38,11 @@ class CustomCelebADataset(Dataset):
         return image
     
 def vae_loss(recon, x, mu, logvar):
+
+    recon = recon.to(x.device)  # Ensure recon is on the same device as x
+    mu = mu.to(x.device)  # Ensure mu is on the same device as x
+    logvar = logvar.to(x.device)  # Ensure logvar is on the same device as x
+
     recon_loss = F.mse_loss(recon, x)
     
     # Here is our KL divergance loss implemented in code
@@ -92,7 +97,7 @@ class UpBlock(nn.Module):
 
 # Encoder
 class Encoder(nn.Module):
-    def __init__(self, channels, ch=32, z=128):
+    def __init__(self, channels, ch=32, z=256):
         super(Encoder, self).__init__()
         self.conv_1 = nn.Conv2d(channels, ch, 3, 1, 1)
 
@@ -123,7 +128,7 @@ class Encoder(nn.Module):
 
 # Decoder
 class Decoder(nn.Module):
-    def __init__(self, channels, ch=32, z=128):
+    def __init__(self, channels, ch=32, z=256):
         super(Decoder, self).__init__()
         
         self.conv1 = nn.ConvTranspose2d(z, 4 * ch, 4, 1)
@@ -148,7 +153,7 @@ class Decoder(nn.Module):
 
 # VAE combining Encoder and Decoder
 class VAE(nn.Module):
-    def __init__(self, channels, ch=32, z=128):
+    def __init__(self, channels, ch=32, z=256):
         super(VAE, self).__init__()
         self.encoder = Encoder(channels, ch, z)
         self.decoder = Decoder(channels, ch, z)
@@ -164,8 +169,10 @@ class VAE(nn.Module):
 
 if __name__ == "__main__":
 
+    load_checkpoint = False # Load checkpoint if it exists
+
     batch_size = 64 # Batch size for training
-    lr = 1e-3  # Learning rate
+    lr = 1e-4  # Learning rate
     nepoch = 500 # Number of Training epochs
     latent_size = 128 # The size of the Latent Vector
 
@@ -183,7 +190,12 @@ if __name__ == "__main__":
     gpu_indx  = 0
     device = torch.device(gpu_indx if use_cuda else "cpu")
 
-    train_images, val_images, test_images = filtered_sets()
+    train_images, val_images, test_images = filtered_sets(subset_size=1000) # For testing purposes, we can use a smaller subset of the dataset
+
+    # Check the number of images in each set
+    print(f"Number of training images: {len(train_images)}")
+    print(f"Number of validation images: {len(val_images)}")
+    print(f"Number of testing images: {len(test_images)}")
 
     # Create our network
     vae_net = VAE(channels=3, z=latent_size).to(device)
@@ -197,7 +209,7 @@ if __name__ == "__main__":
 
     scaler = GradScaler('cuda')
 
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=10)
 
     best_loss = float('inf')
     patience = 10  # Number of epochs with no improvement after which training will be stopped
@@ -244,9 +256,9 @@ if __name__ == "__main__":
     print("Latent vector shape: ", mu.shape)
 
     # Load checkpoint if it exists
-    checkpoint_path = "vae_checkpoint.pth"
+    checkpoint_path = r".\vae_checkpoint.pth"
     start_epoch = 0
-    if os.path.exists(checkpoint_path):
+    if os.path.exists(checkpoint_path) and load_checkpoint:
         checkpoint = torch.load(checkpoint_path)
         vae_net.load_state_dict(checkpoint["model_state"])
         optimizer.load_state_dict(checkpoint["optimizer_state"])
@@ -258,21 +270,22 @@ if __name__ == "__main__":
         start_epoch = checkpoint["epoch"] + 1
         print(f"Checkpoint loaded. Resuming training from epoch {start_epoch}.")
     else:
-        print("No checkpoint found. Starting training from scratch.")
+        if load_checkpoint:
+            print("Checkpoint not used. Starting training from scratch.")
+        else :
+            print("No checkpoint found. Starting training from scratch.")
 
     # Network training
 
     print("Training VAE...")
-    total_start_time = time.time()
-    pbar = trange(start_epoch, nepoch, leave=False, desc="Epoch")   
+    total_start_time = time.time()  
     vae_net.train()
     train_loss = 0
-    for epoch in pbar:
+    for epoch in range(start_epoch, nepoch):
         last_save_time = time.time()
         epoch_start_time = time.time()
-        pbar.set_postfix_str('Loss: %.4f' % (train_loss/len(train_loader)))
         train_loss = 0
-        for i, data in enumerate(tqdm(train_loader, leave=False, desc="Training")):
+        for i, data in enumerate(train_loader):
             batch_start_time = time.time()
 
             image = data.to(device, non_blocking=True)
@@ -284,18 +297,25 @@ if __name__ == "__main__":
 
             if not torch.isfinite(loss):
                 print("Loss is NaN or Inf!")
-
-            # Calculate the loss
-            loss = vae_loss(recon_data, image, mu, logvar)
             
             # Log the loss
             loss_log.append(loss.item())
             train_loss += loss.item()
 
             # Take a training step
-            vae_net.zero_grad()
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+
+            """
+            # Scale Gradients
+            scaler.scale(loss).backward()
+            
+            # Update Optimizer
+            scaler.step(optimizer)
+            scaler.update()
+            """
 
             # Mesurer la durée du batch
             batch_duration = time.time() - batch_start_time
