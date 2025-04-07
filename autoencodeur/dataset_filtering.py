@@ -1,12 +1,13 @@
 import os
 from sklearn.model_selection import train_test_split
+import random
 import time
 
 # root is the directory where the dataset is stored (change this to your dataset path if needed)
 # make sure to have the dataset in the correct format as described in the original celeba dataset
 
 tolerance = 10  # Tolerance for checking if the face is facing forward
-def filtered_sets(root= "D:/Datasets/", for_test=False, tolerance=tolerance):
+def filtered_sets(root= "D:/Datasets/", for_test=False, tolerance=tolerance, subset_size=None):
 
     # Path to the attribute files (needed for filtering)
     attr_file_path = os.path.join(root, 'celeba', 'list_attr_celeba.txt')
@@ -79,6 +80,10 @@ def filtered_sets(root= "D:/Datasets/", for_test=False, tolerance=tolerance):
         return True
 
     filtered_images = [img for img in filtered_images if is_facing_forward(attrs[img]['landmarks'], attrs[img]['bbox'])]
+
+    if subset_size is not None:
+        # If subset_size is specified, sample the filtered images
+        filtered_images = filtered_images[:subset_size]
 
     # Divide the filtered images into training, validation, and testing sets
     train_images, test_images = train_test_split(filtered_images, test_size=0.2, random_state=42)
