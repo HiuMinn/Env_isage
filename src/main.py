@@ -8,20 +8,43 @@ import algorithme_genetique as ag
 import interface_graphique as ig
 import torch
 import autoencodeur as ae
+import json
 
+FILENAME = "./tmp/dict_vect.txt"
 def get_one_img():
+    pass
+def clear_tmp():
     pass
 
 def add_to_tmp(img):
-
-    return name
+    pass
 
 
 def clear_tmp():
     pass
 
 def add_to_dict(key, value):
-    pass
+    """
+    Mettre a jour le dictionnaire dans le fichier
+    :param key:
+    :param value:
+    :return:
+    """
+    with open(FILENAME, "a") as fichier:
+        fichier.write(f"{key}:{json.dumps(value.tolist() if isinstance(value, np.ndarray) else value)}\n")
+
+def read_dict():
+    data = {}
+    try:
+        with open(FILENAME,"r") as f:
+            for line in f:
+                key,value = line.strip().split(":")
+                parsed_value = json.loads(value)  # Convertit JSON en liste/array
+                data[int(key)] = np.array(parsed_value) if isinstance(parsed_value, list) else parsed_value
+
+    except FileNotFoundError:
+        pass # si le fichier n'existe pas encore
+    return data
 
 def replace_20_first_img_in_directory(nb=20):
     """
@@ -42,6 +65,7 @@ def generate_img(l_of_one_img_name, var):
         add_to_dict(i,vec)
 
 
+
 def combine_img(l_of_img_names,var):
     img_vec_dict = read_dict()
     l_vec_parents = [img_vec_dict[name] for name in l_of_img_names]
@@ -58,3 +82,5 @@ if __name__=='__main__':
     window = ig.WelcomeScreen()
     window.show()
     sys.exit(app.exec())
+    with open(FILENAME, "w") as f: #vider le fichier
+        pass
