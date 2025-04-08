@@ -4,8 +4,8 @@ import os
 from torchvision import transforms
 from PIL import Image
 
-import dataset_filtering  # The dataset filtering code is in dataset_filtering.py
-import vae  # The VAE model is defined in vae_model.py
+import autoencodeur.dataset_filtering as datase_filtering  # The dataset filtering code is in dataset_filtering.py
+import autoencodeur.vae as vae  # The VAE model is defined in vae_model.py
 
 # Transformation utilisée pour charger l'image
 transform = transforms.Compose([
@@ -14,7 +14,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  # Normalisation utilisée lors de l'entraînement
 ])
 
-def encode(image_path, model=r".\vae_final.pth"):
+def encode(image_path, model=r"./src/autoencodeur/vae_final.pth"):
     """
     Encodes the input vector using the VAE model.
 
@@ -24,9 +24,9 @@ def encode(image_path, model=r".\vae_final.pth"):
     """
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    vae = vae.VAE(channels=3).to(device)
-    vae.load_state_dict(torch.load(model, map_location=device))
-    vae.eval()
+    vae_net = vae.VAE(channels=3).to(device)
+    vae_net.load_state_dict(torch.load(model, map_location=device))
+    vae_net.eval()
 
     # Charger une image de test
     image = Image.open(image_path).convert("RGB")  # Charger l'image et la convertir en RGB
@@ -34,19 +34,19 @@ def encode(image_path, model=r".\vae_final.pth"):
 
     # Encoder l'image
     with torch.no_grad():
-        z, _, _ = vae.encoder(image)  # Récupérez z, mu, et logvar
+        z, _, _ = vae_net.encoder(image)  # Récupérez z, mu, et logvar
     return z
 
-def decode(z, model=r".\vae_final.pth"):
+def decode(z, model=r"./src/autoencodeur/vae_final.pth"):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    vae = vae.VAE(channels=3).to(device)
-    vae.load_state_dict(torch.load(model, map_location=device))
-    vae.eval()
+    vae_net = vae.VAE(channels=3).to(device)
+    vae_net.load_state_dict(torch.load(model, map_location=device))
+    vae_net.eval()
 
     # Decoder l'image
     with torch.no_grad():
-        z = vae.decoder(z)
+        z = vae_net.decoder(z)
 
     return z
 
