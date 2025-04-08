@@ -1,8 +1,8 @@
 name: env_isage
 channels:
   - pytorch
-  - defaults
   - conda-forge
+  - defaults
 dependencies:
   - python=3.11
   - numpy
@@ -12,14 +12,8 @@ dependencies:
   - PyQt6
   - matplotlib
   - scikit-learn
-  - torch
-  - torchvision
   - pip
   - pip:
       - requests
       - pyyaml
       - sympy
-platforms:
-  - linux-64
-  - osx-arm64
-  - win-64

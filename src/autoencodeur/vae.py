@@ -9,11 +9,9 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.amp import GradScaler, autocast
 import os
 import random
-import matplotlib.pyplot as plt
 from PIL import Image
-from tqdm.notebook import trange, tqdm
 import time
-from dataset_filtering import filtered_sets
+from autoencodeur.dataset_filtering import filtered_sets
 
 root = "D:/Datasets/" # Path to the celebA directory
 
