@@ -1,4 +1,7 @@
 import sys
+
+import torch
+
 sys.path.append("./interface_graphique/")
 sys.path.append("./autoencodeur/")
 sys.path.append("./algorithme_genetique/")
@@ -6,7 +9,7 @@ sys.path.append("./algorithme_genetique/")
 import numpy as np
 from PIL import Image
 
-from algorithme_genetique import main_algorithme_genetique as ag
+from algorithme_genetique import al_matrice as ag
 #from interface_graphique import test7 as ig
 from autoencodeur import vae_plot as ae
 import json
@@ -144,6 +147,10 @@ if __name__=='__main__':
     with open(FILENAME, "w") as f: #vider le fichier
         pass"""
 
-    with open(FILENAME, "w") as f:  # vider le fichier
-        pass
-    z = ae.encode("./src/tmp/000.png")
+
+    z1 = ae.encode("./src/tmp/000.png").numpy()
+    z2 = ae.encode("./src/tmp/001.png").numpy()
+    import matplotlib.pyplot as plt
+    parent = [z1, z2]
+    list_enfant = ag.main_mutation(parent,schema=[0,2], var_fusion=1, var_bruit=1,nb_fils=4)
+    print(list_enfant[0])
