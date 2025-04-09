@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 
 def fusion_poids_lognormal(l_parents, sigma, nb_fils=4):
@@ -13,17 +14,22 @@ def fusion_poids_lognormal(l_parents, sigma, nb_fils=4):
     :rtype: list[array_like]
 
     """
-    l_parents = np.asarray(l_parents)
-    n_parents = l_parents.shape[0]
 
+
+    if isinstance(l_parents, list):
+        l_parents = torch.stack(l_parents)  # [n_parents, C, H, W]
+
+    n_parents = l_parents.size(0)
     l_fils = []
+
     for _ in range(nb_fils):
-        # Étape 1 : Fusion par moyenne pondérée (log-normale)
-        poids = np.random.lognormal(mean=1, sigma=sigma, size=n_parents)
+        poids = torch.from_numpy(
+            np.random.lognormal(mean=1, sigma=sigma, size=n_parents)
+        ).float()
         poids /= poids.sum()
-        enfant = np.average(l_parents, axis=0, weights=poids)
 
-
+        poids = poids.view(-1, 1, 1, 1)  # pour [n_parents, C, H, W]
+        enfant = torch.sum(l_parents * poids, dim=0)  # somme pondérée
         l_fils.append(enfant)
 
     return l_fils
@@ -47,17 +53,21 @@ def fusion_poids_normal(l_parents, sigma, nb_fils=4):
     fusion_poids_normal(np.random.rand(2,3),1)
     """
 
-    l_parents = np.asarray(l_parents)
-    n_parents = l_parents.shape[0]
 
+    if isinstance(l_parents, list):
+        l_parents = torch.stack(l_parents)  # [n_parents, C, H, W]
+
+    n_parents = l_parents.size(0)
     l_fils = []
+
     for _ in range(nb_fils):
-        # Étape 1 : Fusion par moyenne pondérée (log-normale)
-        poids = np.random.normal(mean=0, sigma=sigma, size=n_parents)
+        poids = torch.from_numpy(
+            np.random.ormal(mean=0, sigma=sigma, size=n_parents)
+        ).float()
         poids /= poids.sum()
-        enfant = np.average(l_parents, axis=0, weights=poids)
 
-
+        poids = poids.view(-1, 1, 1, 1)  # pour [n_parents, C, H, W]
+        enfant = torch.sum(l_parents * poids, dim=0)  # somme pondérée
         l_fils.append(enfant)
 
     return l_fils
@@ -75,15 +85,18 @@ def bruitage(l_parents, sigma, reset_prob = 0.05):
 
     """
 
-    l_parents = np.asarray(l_parents)
-    n_parents = l_parents.shape[0]
-
+    n_parents = len(l_parents)
     l_fils = []
-    for parent in l_parents:
 
-        enfant_mutated = parent + np.random.normal(0, sigma, size=parent.shape)
-        reset_mask = np.random.rand(*parent.shape) < reset_prob
-        enfant_mutated[reset_mask] = np.random.randn(*parent[reset_mask].shape)
+    for parent in l_parents:
+        # Mutation via distribution normale
+        bruit = torch.normal(0, sigma, size=parent.shape)
+        enfant_mutated = parent + bruit
+
+        # Masque de réinitialisation aléatoire
+        reset_mask = torch.rand_like(parent) < reset_prob
+        enfant_mutated[reset_mask] = torch.randn_like(enfant_mutated[reset_mask])
+
         l_fils.append(enfant_mutated)
 
     return l_fils

@@ -148,9 +148,15 @@ if __name__=='__main__':
         pass"""
 
 
-    z1 = ae.encode("./src/tmp/000.png").numpy()
-    z2 = ae.encode("./src/tmp/001.png").numpy()
+    z1 = ae.encode("./src/tmp/000.png")
+    z2 = ae.encode("./src/tmp/001.png")
     import matplotlib.pyplot as plt
     parent = [z1, z2]
-    list_enfant = ag.main_mutation(parent,schema=[0,2], var_fusion=1, var_bruit=1,nb_fils=4)
+    list_enfant = ag.main_mutation(parent,schema=[0,2],var_fusion=0.3,var_bruit=0.2,nb_fils=4)
     print(list_enfant[0])
+    img_decoded = ae.decode(list_enfant[0])
+    img = img_decoded[0]  # ou img = img_decoded[i] pour une autre image
+    img = img.permute(1, 2, 0)  # [C, H, W] → [H, W, C]
+    plt.imshow(img.cpu().numpy())
+    plt.axis("off")
+    plt.show()
