@@ -3,8 +3,11 @@ import torch
 import os
 from torchvision import transforms
 from PIL import Image
+import sys
 
-import autoencodeur.dataset_filtering as datase_filtering  # The dataset filtering code is in dataset_filtering.py
+sys.path.append("./autoencodeur/")
+
+import autoencodeur.dataset_filtering as dataset_filtering  # The dataset filtering code is in dataset_filtering.py
 import autoencodeur.vae as vae  # The VAE model is defined in vae_model.py
 
 # Transformation utilisée pour charger l'image
@@ -49,6 +52,21 @@ def decode(z, model=r"./src/autoencodeur/vae_final.pth"):
         z = vae_net.decoder(z)
 
     return z
+
+def save_image(tensor, filename, path=r"./src/tmp/"):
+    """
+    Save a tensor as an image.
+
+    :param tensor: Tensor to be saved as an image.
+    :param filename: Name of the output file.
+    :param path: Path where the image will be saved.
+    """
+    # Dé-normaliser le tenseur pour l'affichage
+    image = tensor.squeeze(0).permute(1, 2, 0).cpu().numpy() * 0.5 + 0.5
+    image = (image * 255).astype('uint8')  # Convertir en uint8 pour sauvegarde
+    image_pil = Image.fromarray(image)
+    image_pil.save(os.path.join(path, filename))
+
 
 if __name__ == "__main__":
 
@@ -101,3 +119,7 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
+
+    # Sauvegarder l'image reconstruite
+    save_image(decoded, "reconstructed_image.png")
+    print("Reconstructed image saved as 'reconstructed_image.png'")
