@@ -564,8 +564,33 @@ class PortraitWorkspace(QWidget):
         # Scroll area
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setStyleSheet("border: none; background-color: black;")
-
+        self.scroll_area.setStyleSheet("""
+         QScrollArea {
+           border: none;
+           background-color: black;
+       }
+       QScrollBar:vertical {
+           background: black;
+           width: 14px;
+           margin: 0px;
+       }
+       QScrollBar::handle:vertical {
+           background: rgba(255, 255, 255, 120);  /* blanc semi-transparent */
+           min-height: 20px;
+           border-radius: 7px;
+       }
+       QScrollBar::handle:vertical:hover {
+           background: rgba(255, 255, 255, 180);  /* plus lumineux au survol */
+       }
+       QScrollBar::add-line:vertical,
+       QScrollBar::sub-line:vertical {
+           height: 0px;
+           background: none;
+       }
+       QScrollBar::add-page:vertical,
+       QScrollBar::sub-page:vertical {
+           background: none;
+       }""")
         self.history_widget = QWidget()
         history_container_layout = QVBoxLayout()
         history_container_layout.setContentsMargins(0, 0, 0, 0)
