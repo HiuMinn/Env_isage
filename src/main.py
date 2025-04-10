@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image
 
 from algorithme_genetique import al_matrice as ag
-#from interface_graphique import test7 as ig
+from interface_graphique import test8 as ig
 from autoencodeur import vae_plot as ae
 import json
 import pickle
@@ -32,11 +32,9 @@ def add_to_tmp(img, j):
     """
     source = f"./src/data/{img}"
     #source = f"D:/Users/elisa/INFO7_BS/datasets/celeba_filtered/{img}"
-    if j < 10 : 
-        name = f"00{j}"
-        
-    else : 
-        name = f"0{j}"
+
+    name = f"img{j+1}"
+
     destination = f"./src/tmp/{name}.png"
     shutil.copy(source, destination)
     return f"./src/tmp/{name}.png" #name
@@ -140,23 +138,23 @@ def combine_img(l_of_img_names,var):
 
 
 if __name__=='__main__':
-    """app = ig.QApplication(sys.argv)
+    app = ig.QApplication(sys.argv)
     window = ig.WelcomeScreen()
     window.show()
     sys.exit(app.exec())
     with open(FILENAME, "w") as f: #vider le fichier
-        pass"""
+        pass
 
 
-    z1 = ae.encode("./src/tmp/000.png")
-    z2 = ae.encode("./src/tmp/001.png")
-    import matplotlib.pyplot as plt
-    parent = [z1, z2]
-    list_enfant = ag.main_mutation(parent,schema=[0,2],var_fusion=0.3,var_bruit=0.2,nb_fils=4)
-    print(list_enfant[0])
-    img_decoded = ae.decode(list_enfant[0])
-    img = img_decoded[0]  # ou img = img_decoded[i] pour une autre image
-    img = img.permute(1, 2, 0)  # [C, H, W] → [H, W, C]
-    plt.imshow(img.cpu().numpy())
-    plt.axis("off")
-    plt.show()
+    # z1 = ae.encode("./src/tmp/000.png")
+    # z2 = ae.encode("./src/tmp/001.png")
+    # import matplotlib.pyplot as plt
+    # parent = [z1, z2]
+    # list_enfant = ag.main_mutation(parent,schema=[0,2],var_fusion=0.3,var_bruit=0.2,nb_fils=4)
+    # print(list_enfant[0])
+    # img_decoded = ae.decode(list_enfant[0])
+    # img = img_decoded[0]  # ou img = img_decoded[i] pour une autre image
+    # img = img.permute(1, 2, 0)  # [C, H, W] → [H, W, C]
+    # plt.imshow(img.cpu().numpy())
+    # plt.axis("off")
+    # plt.show()
