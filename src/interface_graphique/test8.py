@@ -58,7 +58,7 @@ class WelcomeScreen(QWidget):
 
         # Image de fond
         self.background = QLabel(self)
-        pixmap = QPixmap("/Users/laura.forestier/Documents/4BIM_S2/Développement Logiciel/Projet-4BIM/image_de_fond.png")  # Mets le bon chemin ici
+        pixmap = QPixmap("./src/interface_graphique/image_de_fond.png")  # Mets le bon chemin ici
         self.background.setPixmap(pixmap)
         self.background.setScaledContents(True)
         self.background.setGeometry(0, 0, self.width(), self.height())
@@ -299,7 +299,7 @@ class MainScreen(QWidget):
         self.grid_layout = QGridLayout()
         self.grid_layout.setSpacing(5)
 
-        self.image_paths = [f"/Users/laura.forestier/Documents/4BIM_S2/Développement Logiciel/Projet-4BIM/img{i}.jpeg" for i in range(1, 21)]
+        self.image_paths = [f"./src/data/img{i}.png" for i in range(1, 21)]
         self.image_size = 150
         self.row, self.col = 0, 0
         self.image_labels = []  
@@ -467,7 +467,7 @@ class MainScreen(QWidget):
 
         # Ajouter le bouton "Régénérer" dans le même layout horizontal
         self.regenerate_button = QPushButton(self)
-        self.regenerate_button.setIcon(QIcon("/Users/laura.forestier/Documents/4BIM_S2/Développement Logiciel/Projet-4BIM/icone1.png"))
+        self.regenerate_button.setIcon(QIcon("./src/interface_graphique/icone1.png"))
         self.regenerate_button.setIconSize(QSize(40, 40))  # Taille de l'icône
         self.regenerate_button.setStyleSheet("border: none; background-color: transparent;")
         self.regenerate_button.setFixedSize(50, 50)
