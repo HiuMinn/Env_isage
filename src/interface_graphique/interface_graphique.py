@@ -1057,7 +1057,7 @@ class FinalScreen(QWidget):
             if pixmap:  # Si le pixmap est valide
                 # Vérification du format de fichier
                 if not file_path.endswith(('.png', '.xpm', '.jpg')):  # Si le format du fichier n'est pas correct
-                    file_path += '.jpg'  # Par défaut, on ajoute .png si aucun format n'est spécifié
+                    file_path += '.jpg'  # Par défaut, on ajoute .jpg si aucun format n'est spécifié
 
                 print(f"Essayer d'enregistrer l'image à {file_path}")  # Message de débogage avant l'enregistrement
                 
