@@ -21,6 +21,10 @@ ABS_DIR = os.path.dirname(os.path.abspath(__file__))
 DICT_LATENT = {}
 
 def get_one_img():
+    """
+    récupère aléatoirement un image dans le fichier data
+    :return:
+    """
     file = os.listdir("./src/data")
     #file = os.listdir("D:/Users/elisa/INFO7_BS/datasets/celeba_filtered")
     chosen_img = random.choice(file)
@@ -65,7 +69,7 @@ def already_chosen_img(img, chosen_img_set):
 def add_to_dict(key, value):
     """
     Mettre a jour le dictionnaire dans un fichier
-    :param key: l'ordre de l'image à ajouter dans un dictionnaire
+    :param key: le répertoire absolu du fichier image
     :param value: vecteur latent encodée de l'image correspondant
     :return:
     """
@@ -90,10 +94,10 @@ def replace_20_first_img_in_directory(nb=20):
 
 def generate_img(l_of_one_img_name, var=0.2):
     """
-
-    :param l_of_one_img_name:
-    :param var:
-    :return:
+    Varier l'image sélectionné pour la mutation
+    :param l_of_one_img_name: list de répertoire de l'image à générer
+    :param var: Variance du bruit appliquer sur l'image
+    :return: None
     """
     parent = [DICT_LATENT[l_of_one_img_name[0]]]
     l_vec_son = ag.bruitage([val for val in parent for _ in range(4)], sigma = var) #appliquer la mutation a 4 enfants d'image choisi
@@ -106,10 +110,10 @@ def generate_img(l_of_one_img_name, var=0.2):
 
 def combine_img(l_of_img_names,var_bruit = 0.25,var_fusion= 0.65):
     """
-
-    :param l_of_img_names:
-    :param var:
-    :return:
+    Combiner les images sélectionner en utilisant algorithme génétique
+    :param l_of_img_names: list des répertoires des images sélectionnées
+    :param var_fusion: variance des poids tirés par les lois définis
+    :return: None
     """
     l_vec_parents = [DICT_LATENT[name] for name in l_of_img_names]
     l_vec_son = ag.main_mutation(l_vec_parents, schema=[0,2],var_bruit=var_bruit,var_fusion=var_fusion,nb_fils=4)
