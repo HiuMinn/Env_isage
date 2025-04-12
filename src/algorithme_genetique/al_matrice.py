@@ -17,7 +17,7 @@ def fusion_poids_lognormal(l_parents, sigma, nb_fils=4):
 
 
     if isinstance(l_parents, list):
-        l_parents = torch.stack(l_parents)  # [n_parents, C, H, W]
+        l_parents = torch.stack([p.squeeze(0) if p.dim() == 4 else p for p in l_parents])  # [n_parents, C, H, W]
 
     n_parents = l_parents.size(0)
     l_fils = []
@@ -30,6 +30,7 @@ def fusion_poids_lognormal(l_parents, sigma, nb_fils=4):
 
         poids = poids.view(-1, 1, 1, 1)  # pour [n_parents, C, H, W]
         enfant = torch.sum(l_parents * poids, dim=0)  # somme pondérée
+        enfant = enfant.unsqueeze(0)
         l_fils.append(enfant)
 
     return l_fils
@@ -68,7 +69,7 @@ def fusion_poids_normal(l_parents, sigma, nb_fils=4):
 
         poids = poids.view(-1, 1, 1, 1)  # pour [n_parents, C, H, W]
         enfant = torch.sum(l_parents * poids, dim=0)  # somme pondérée
-        l_fils.append(enfant)
+        l_fils.append(enfant.unsqueeze(0))
 
     return l_fils
 

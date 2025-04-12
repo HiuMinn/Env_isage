@@ -67,7 +67,6 @@ def save_image(tensor, filename, path=r"./src/tmp/"):
     image_pil = Image.fromarray(image)
     image_pil.save(os.path.join(path, filename))
 
-
 if __name__ == "__main__":
 
     # Charger les ensembles d'images

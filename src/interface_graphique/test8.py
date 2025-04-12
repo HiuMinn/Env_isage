@@ -1,11 +1,15 @@
-#Import des librairies PyQt6
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QFrame, QGraphicsDropShadowEffect, QGridLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QGraphicsDropShadowEffect, QMessageBox, QScrollArea
+# Import des librairies PyQt6
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QFrame, QGraphicsDropShadowEffect, \
+    QGridLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QGraphicsDropShadowEffect, QMessageBox, QScrollArea, QFileDialog
 from PyQt6.QtGui import QFont, QPixmap, QColor, QFontDatabase, QIcon, QPalette, QFont
-from PyQt6.QtCore import Qt, QTimer, QSize, QPropertyAnimation, QEasingCurve, pyqtSignal
+from PyQt6.QtCore import Qt, QTimer, QSize, QPropertyAnimation, QEasingCurve, pyqtSignal, QRect
 import sys
 import random as rd
 import os
-#import main
+
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import share
 
 #######  ECRAN D'ACCUEIL ###########
 class WelcomeScreen(QWidget):
@@ -22,7 +26,7 @@ class WelcomeScreen(QWidget):
 
         self.shadow.setColor(QColor(self.brightness, 0, 0))  # Change l’intensité du rouge
     """
-        
+
     def animate_neon(self):
         """ Fait varier la luminosité de façon aléatoire pour un effet de panne néon """
         if rd.random() < 0.2:  # 20% de chances d'une pause plus longue (extinction temporaire)
@@ -41,7 +45,7 @@ class WelcomeScreen(QWidget):
         self.main_screen = MainScreen()
         self.main_screen.show()
         self.close()
-    
+
     def start_zoom_animation(self):
         """ Anime le texte 'WELCOME !' avec un effet de zoom/dézoom """
         self.zoom_animation = QPropertyAnimation(self.label, b"scale")
@@ -58,7 +62,8 @@ class WelcomeScreen(QWidget):
 
         # Image de fond
         self.background = QLabel(self)
-        pixmap = QPixmap("./src/interface_graphique/image_de_fond.png")  # Mets le bon chemin ici
+        pixmap = QPixmap(
+            os.path.join(os.path.dirname(os.path.abspath(__file__)),"image_de_fond.png"))  # Mets le bon chemin ici
         self.background.setPixmap(pixmap)
         self.background.setScaledContents(True)
         self.background.setGeometry(0, 0, self.width(), self.height())
@@ -76,16 +81,16 @@ class WelcomeScreen(QWidget):
 
         # Effet néon
         self.shadow = QGraphicsDropShadowEffect()
-        self.shadow.setBlurRadius(70) # Pour la largeur de l'effet néon
-        self.shadow.setColor(QColor(255, 255, 255)) # Néon blanc
-        self.shadow.setOffset(0,0) # Pas de décalage, juste la lueur autour
+        self.shadow.setBlurRadius(70)  # Pour la largeur de l'effet néon
+        self.shadow.setColor(QColor(255, 255, 255))  # Néon blanc
+        self.shadow.setOffset(0, 0)  # Pas de décalage, juste la lueur autour
 
-        self.label.setGraphicsEffect(self.shadow) # application de l'effet
+        self.label.setGraphicsEffect(self.shadow)  # application de l'effet
         layout.addWidget(self.label)
 
         # Animation du néon pour qu'il clignote
         self.brightness = 0
-        self.brightness_direction = -10 # Diminue puis remonte pour faire genre ça clignote
+        self.brightness_direction = -10  # Diminue puis remonte pour faire genre ça clignote
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.animate_neon)
         self.start_random_blinking()
@@ -143,20 +148,22 @@ class WelcomeScreen(QWidget):
     def resizeEvent(self, event):
         """ Redimensionner l'image de fond automatiquement """
         self.background.setGeometry(0, 0, self.width(), self.height())
-    
+
     def show_tutorial(self):
         """ Ouvre le tutoriel """
         self.tutorial_popup = UndertaleDialog()
         self.tutorial_popup.show()
-    
+
     from PyQt6.QtCore import QPropertyAnimation, QRect
+
 
 def start_welcome_animation(self):
     """ Anime le texte 'WELCOME !' avec un effet de saut """
     self.animation = QPropertyAnimation(self.label, b"geometry")
     self.animation.setDuration(500)  # Durée totale du saut en millisecondes
     self.animation.setStartValue(QRect(self.label.x(), self.label.y(), self.label.width(), self.label.height()))
-    self.animation.setEndValue(QRect(self.label.x(), self.label.y() - 20, self.label.width(), self.label.height()))  # Monte légèrement
+    self.animation.setEndValue(
+        QRect(self.label.x(), self.label.y() - 20, self.label.width(), self.label.height()))  # Monte légèrement
     self.animation.setLoopCount(-1)  # Répète l'animation en boucle
     self.animation.setEasingCurve(QEasingCurve.Type.OutBounce)  # Effet rebondissant
     self.animation.start()
@@ -169,7 +176,8 @@ def start_welcome_animation(self):
     self.zoom_animation.setEasingCurve(QEasingCurve.Type.InOutQuad)  # Animation fluide
     self.zoom_animation.start()
 
-####### TUTORIEL(TUTORIAL) ###########    
+
+####### TUTORIEL ###########
 class UndertaleDialog(QWidget):
     def __init__(self):
         super().__init__()
@@ -182,20 +190,20 @@ class UndertaleDialog(QWidget):
             "* Once you're satisfied with the portraits presented, click 'Finish' to validate.",
             "* Now, you're ready to start! Good luck!"
         ]
-        self.dialog_index = 0  
-        self.full_text = self.dialogs[self.dialog_index]  
-        self.current_text = ""  
-        self.text_index = 0  
-        self.show_cursor = False  
+        self.dialog_index = 0
+        self.full_text = self.dialogs[self.dialog_index]
+        self.current_text = ""
+        self.text_index = 0
+        self.show_cursor = False
 
         self.initUI()
-        self.setWindowOpacity(0)  
-        self.start_fade_in_animation()  
+        self.setWindowOpacity(0)
+        self.start_fade_in_animation()
 
     def initUI(self):
         self.setWindowTitle("Tutorial")
         self.setGeometry(300, 200, 650, 250)  # 🔹 Augmentation de la hauteur pour le titre
-        self.setStyleSheet("background-color: black;")  
+        self.setStyleSheet("background-color: black;")
 
         # ✅ Ajout du Titre "TUTORIAL"
         self.title_label = QLabel("TUTORIAL", self)
@@ -211,10 +219,10 @@ class UndertaleDialog(QWidget):
 
         # ✅ Texte sans cadre supplémentaire
         self.text_label = QLabel(self.dialog_frame)
-        self.text_label.setStyleSheet("color: white; border: none;")  
+        self.text_label.setStyleSheet("color: white; border: none;")
         self.text_label.setFont(QFont("Eight-Bit Madness", 20))
         self.text_label.setWordWrap(True)
-        self.text_label.setGeometry(20, 20, 500, 50)  
+        self.text_label.setGeometry(20, 20, 500, 50)
 
         # ✅ Bouton OK bien intégré dans le cadre
         self.ok_button = QPushButton("OK", self.dialog_frame)
@@ -224,7 +232,7 @@ class UndertaleDialog(QWidget):
         self.ok_button.setFont(QFont("Eight-Bit Madness", 12))
         self.ok_button.setGeometry(460, 70, 60, 25)  # 🔹 Position correcte en bas à droite
         self.ok_button.clicked.connect(self.next_dialog)
-        self.ok_button.hide()  
+        self.ok_button.hide()
 
         self.text_timer = QTimer(self)
         self.text_timer.timeout.connect(self.update_text)
@@ -253,8 +261,8 @@ class UndertaleDialog(QWidget):
             self.text_index += 1
         else:
             self.text_timer.stop()
-            self.cursor_timer.start(500)  
-            self.ok_button.show()  
+            self.cursor_timer.start(500)
+            self.ok_button.show()
 
     def blink_cursor(self):
         if self.show_cursor:
@@ -264,8 +272,8 @@ class UndertaleDialog(QWidget):
         self.show_cursor = not self.show_cursor
 
     def next_dialog(self):
-        self.cursor_timer.stop()  
-        self.ok_button.hide()  
+        self.cursor_timer.stop()
+        self.ok_button.hide()
 
         if self.dialog_index < len(self.dialogs) - 1:
             self.dialog_index += 1
@@ -273,13 +281,14 @@ class UndertaleDialog(QWidget):
             self.current_text = ""
             self.text_index = 0
 
-            self.text_label.setText("")  
-            self.text_timer.start(50)  
+            self.text_label.setText("")
+            self.text_timer.start(50)
         else:
-            self.close()    
+            self.close()
+
+        #######  START SCREEN ###########
 
 
-#######  MAIN SCREEN (START) ###########
 class MainScreen(QWidget):
     def __init__(self):
         super().__init__()
@@ -287,7 +296,7 @@ class MainScreen(QWidget):
         self.setWindowTitle("Sélection d'images")
         self.setGeometry(100, 100, 800, 600)
         self.setStyleSheet("background-color: black;")
-        self.tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tmp")
+        self.tmp = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "tmp"))
 
         layout = QVBoxLayout(self)
 
@@ -299,12 +308,12 @@ class MainScreen(QWidget):
         self.grid_layout = QGridLayout()
         self.grid_layout.setSpacing(5)
 
-        self.image_paths = [f"./src/data/img{i}.png" for i in range(1, 21)]
+        self.image_paths = [os.path.join(self.tmp,f"img{i}.png") for i in range(1, 21)]
         self.image_size = 150
         self.row, self.col = 0, 0
-        self.image_labels = []  
-        self.selected_images = []  
-        self.selection_mode = "combine"  
+        self.image_labels = []
+        self.selected_images = []
+        self.selection_mode = "combine"
         self.load_images()
 
         layout.addWidget(self.label)
@@ -319,7 +328,7 @@ class MainScreen(QWidget):
 
     def load_images(self):
         """Charge 20 images aléatoires dans le grid_layout depuis le dossier tmp"""
-        img_folder = "tmp"
+        img_folder = self.tmp
 
         # Vérifier que le dossier existe
         if not os.path.exists(img_folder):
@@ -341,7 +350,7 @@ class MainScreen(QWidget):
         for i in reversed(range(self.grid_layout.count())):
             self.grid_layout.itemAt(i).widget().deleteLater()
 
-        self.image_labels = []  
+        self.image_labels = []
         self.selected_images = []
         self.row, self.col = 0, 0
 
@@ -368,8 +377,10 @@ class MainScreen(QWidget):
 
     def create_image_click_handler(self, image_label):
         """Retourne une fonction de gestion du clic pour chaque image"""
+
         def on_image_click(event):
             self.toggle_image_selection(image_label)
+
         return on_image_click
 
     def toggle_image_selection(self, image_label):
@@ -394,11 +405,11 @@ class MainScreen(QWidget):
     def update_buttons_state(self):
         """Met à jour l'état des boutons en fonction des images sélectionnées"""
         if len(self.selected_images) > 1:
-            self.generate_button.setEnabled(False)  
-            self.combine_button.setEnabled(True)   
+            self.generate_button.setEnabled(False)
+            self.combine_button.setEnabled(True)
         elif len(self.selected_images) == 1:
-            self.generate_button.setEnabled(True)  
-            self.combine_button.setEnabled(False)  
+            self.generate_button.setEnabled(True)
+            self.combine_button.setEnabled(False)
         else:
             self.generate_button.setEnabled(False)
             self.combine_button.setEnabled(False)
@@ -406,13 +417,13 @@ class MainScreen(QWidget):
     def on_generate_button_click(self):
         """ Ouvre la fenêtre GenerateScreen avec les images sélectionnées """
         if self.selected_images:
-            #main.generate_img(self.selected_images) #appel de la fonction generate_img (algo génétique)
+            share.generate_img(self.selected_images) #appel de la fonction generate_img (algo génétique)
             self.window = PortraitWorkspace(self.selected_images, self.tmp)
             self.window.show()
 
     def on_combine_button_click(self):
         """ Ouvre la fenêtre CombineScreen avec les images sélectionnées """
-        #main.combine_img(self.selected_images) #appel de la fonction combine_img (plusieurs images)   
+        share.combine_img(self.selected_images) #appel de la fonction combine_img (plusieurs images)
         if self.selected_images:
             self.window = PortraitWorkspace(self.selected_images, self.tmp)
             self.window.show()
@@ -445,18 +456,18 @@ class MainScreen(QWidget):
         self.combine_button.setStyleSheet(button_style)
         self.combine_button.setFixedSize(200, 50)
         self.combine_button.setFont(QFont("8_bit_1_6", 28))
-        self.combine_button.setEnabled(False)  
+        self.combine_button.setEnabled(False)
         button_layout.addWidget(self.combine_button)
 
         self.generate_button = QPushButton("GENERATE", self)
         self.generate_button.setStyleSheet(button_style)
         self.generate_button.setFixedSize(200, 50)
         self.generate_button.setFont(QFont("8_bit_1_6", 28))
-        self.generate_button.setEnabled(False)  
+        self.generate_button.setEnabled(False)
         button_layout.addWidget(self.generate_button)
 
-        self.generate_button.clicked.connect(self.on_generate_button_click)  
-        self.combine_button.clicked.connect(self.on_combine_button_click)  
+        self.generate_button.clicked.connect(self.on_generate_button_click)
+        self.combine_button.clicked.connect(self.on_combine_button_click)
 
         finish_button = QPushButton("FINISH", self)
         finish_button.setStyleSheet(button_style)
@@ -467,7 +478,8 @@ class MainScreen(QWidget):
 
         # Ajouter le bouton "Régénérer" dans le même layout horizontal
         self.regenerate_button = QPushButton(self)
-        self.regenerate_button.setIcon(QIcon("./src/interface_graphique/icone1.png"))
+        self.regenerate_button.setIcon(
+            QIcon(os.path.join(os.path.dirname(os.path.abspath(__file__)),"icone1.png")))
         self.regenerate_button.setIconSize(QSize(40, 40))  # Taille de l'icône
         self.regenerate_button.setStyleSheet("border: none; background-color: transparent;")
         self.regenerate_button.setFixedSize(50, 50)
@@ -498,24 +510,24 @@ class MainScreen(QWidget):
 
         # Mettre à jour l'état des boutons
         self.update_buttons_state()
-    
+
     def on_finish_button_click(self):
         """Affiche la fenêtre FinalScreen"""
         self.final_screen = FinalScreen(self.selected_images)
         self.final_screen.show()
 
 
-
-
-#### PORTRAIT WORKSPACE ####
+##### PORTRAIT WORKSPACE ######
 class PortraitWorkspace(QWidget):
     def __init__(self, selected_images, tmp):
         super().__init__()
         self.tmp = tmp
-        self.genetic_portraits = self.get_last_images(tmp) # DICT récupérer les 4 portraits générés par l'algo génétique, avant = selected_portraits, doit être ajté a selected_portraits
-        self.history_buttons = {} # DICT historique séléctif, ssi une image n'est pas déjà dans l'historique = dictionnaire de Maele
-        self.generated_buttons = [] # LISTE
-        self.selected_images = list(selected_images ) # LISTE, historique global, ajout de toutes les images dès leur séléction
+        self.genetic_portraits = self.get_last_images(
+            tmp)  # DICT récupérer les 4 portraits générés par l'algo génétique, avant = selected_portraits, doit être ajté a selected_portraits
+        self.history_buttons = {}  # DICT historique séléctif, ssi une image n'est pas déjà dans l'historique = dictionnaire de Maele
+        self.generated_buttons = []  # LISTE
+        self.selected_images = list(
+            selected_images)  # LISTE, historique global, ajout de toutes les images dès leur séléction
         self.selected_buttons = []
         self.initUI()
 
@@ -525,7 +537,8 @@ class PortraitWorkspace(QWidget):
             raise ValueError("Image introuvable")
 
         images = [os.path.join(tmp, f) for f in os.listdir(tmp) if f.endswith(('.png', '.jpg', '.jpeg'))]
-        images.sort(key=os.path.getmtime, reverse=True)  # Trier par date de modification (du plus récent au plus ancien)
+        images.sort(key=os.path.getmtime,
+                    reverse=True)  # Trier par date de modification (du plus récent au plus ancien)
 
         # Créer le dictionnaire avec des QIcon et QPushButton
         genetic_portraits = {}
@@ -535,7 +548,7 @@ class PortraitWorkspace(QWidget):
             btn = self.create_image_button(icon)
             genetic_portraits[btn] = icon  # Inverse : clé=QPushButton, valeur=QIcon
 
-        return genetic_portraits # Retour des 4 dernières images du dossier 
+        return genetic_portraits  # Retour des 4 dernières images du dossier
 
     def initUI(self):
         self.setWindowTitle("Portrait Workspace")
@@ -551,7 +564,7 @@ class PortraitWorkspace(QWidget):
         self.history_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.history_layout.setHorizontalSpacing(2)
         self.history_layout.setVerticalSpacing(2)
-        #self.history_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        # self.history_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self.history_label = QLabel("  Selection history  ")
         self.history_label.setStyleSheet("""
@@ -564,33 +577,8 @@ class PortraitWorkspace(QWidget):
         # Scroll area
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setStyleSheet("""
-         QScrollArea {
-           border: none;
-           background-color: black;
-       }
-       QScrollBar:vertical {
-           background: black;
-           width: 14px;
-           margin: 0px;
-       }
-       QScrollBar::handle:vertical {
-           background: rgba(255, 255, 255, 120);  /* blanc semi-transparent */
-           min-height: 20px;
-           border-radius: 7px;
-       }
-       QScrollBar::handle:vertical:hover {
-           background: rgba(255, 255, 255, 180);  /* plus lumineux au survol */
-       }
-       QScrollBar::add-line:vertical,
-       QScrollBar::sub-line:vertical {
-           height: 0px;
-           background: none;
-       }
-       QScrollBar::add-page:vertical,
-       QScrollBar::sub-page:vertical {
-           background: none;
-       }""")
+        self.scroll_area.setStyleSheet("border: none; background-color: black;")
+
         self.history_widget = QWidget()
         history_container_layout = QVBoxLayout()
         history_container_layout.setContentsMargins(0, 0, 0, 0)
@@ -606,8 +594,8 @@ class PortraitWorkspace(QWidget):
         left_container_layout.addWidget(self.history_label, alignment=Qt.AlignmentFlag.AlignCenter)
         left_container_layout.addWidget(self.scroll_area)
 
-        self.left_container.setMaximumWidth(int(self.width() * 0.28)) # Fixer Ã  ~1/3 de lâ€™Ã©cran
-        #left_container.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        self.left_container.setMaximumWidth(int(self.width() * 0.28))  # Fixer Ã  ~1/3 de lâ€™Ã©cran
+        # left_container.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
 
         # Ajouter les layouts dans la disposition principale
         main_layout.addWidget(self.left_container, stretch=1)
@@ -694,7 +682,7 @@ class PortraitWorkspace(QWidget):
                 widget.setParent(None)
 
         self.generated_buttons.clear()
-        
+
         # Charge les boutons du dictionnaire genetic_portraits
         for i, (btn, icon) in enumerate(self.genetic_portraits.items()):
             self.generated_buttons.append(btn)
@@ -735,7 +723,7 @@ class PortraitWorkspace(QWidget):
         self.history_buttons[icon] = btn
         row, col = divmod(len(self.history_buttons) - 1, 2)
         self.history_layout.addWidget(btn, row, col)
-    
+
     def reset_selection_styles(self):
         # Déselectionne les boutons générés
         for btn in self.generated_buttons:
@@ -765,34 +753,48 @@ class PortraitWorkspace(QWidget):
         self.reset_selection_styles()
 
     def on_finish_button_click(self):
-        """Affiche la fenêtre FinalScreen"""
-        self.final_screen = FinalScreen(self.selected_images) # passe la liste totale à final screen, avec dernière image séléctionnée = dernière image 
+        selected_images_2 = []  # Nouvelle liste qui contiendra des QLabel
+
+        # Convertir chaque QPushButton en QLabel
+        for button in self.selected_images:  # self.selected_images contient des QPushButton
+            if isinstance(button, QPushButton):
+                pixmap = button.icon().pixmap(button.size())  # Récupérer le QPixmap de l'icône du bouton
+                if pixmap:
+                    # Créer un QLabel avec l'image
+                    label = QLabel()
+                    label.setPixmap(pixmap)  # Appliquer l'image au QLabel
+                    selected_images_2.append(label)  # Ajouter le QLabel à la nouvelle liste
+
+        # Maintenant, passer selected_images_2 (contenant des QLabel) à FinalScreen
+        self.final_screen = FinalScreen(selected_images_2, self.history_buttons)
         self.final_screen.show()
 
-#### FINAL SCREEN ####
+
+##### FINAL SCREEN #####
 class FinalScreen(QWidget):
-    def __init__(self, selected_images):
+    def __init__(self, selected_images_2, history_buttons):
         super().__init__()
-        self.selected_images = selected_images  # Liste des images sélectionnées
+        self.selected_images = selected_images_2  # Liste des images sélectionnées
+        self.history_buttons = history_buttons  # Dictionnaire des boutons d'historique
         self.setWindowTitle("Well Done")
         self.setGeometry(100, 100, 800, 600)  # Taille et position de la fenêtre
         self.setStyleSheet("background-color: black;")  # Style de fond noir
-    
+
         layout = QVBoxLayout(self)
 
-        # "Well Done!" Title with Neon Effect (Same as 'WELCOME!' in WelcomeScreen)
+        # "Well Done!" Title with Neon Effect
         self.label = QLabel("Well Done!", self)
         self.label.setFont(QFont("Press Start 2P", 45, QFont.Weight.Bold))  # Font and size
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setStyleSheet("color: white; background: transparent; border: none;")  # White text color
         self.label.setFixedHeight(50)  # Reduced height for the label area
-        
+
         # Neon effect using QGraphicsDropShadowEffect
         self.shadow = QGraphicsDropShadowEffect()
         self.shadow.setBlurRadius(70)  # Width of the neon effect
         self.shadow.setColor(QColor(255, 255, 255))  # White neon color
         self.shadow.setOffset(0, 0)  # No offset, just the glow around
-        
+
         self.label.setGraphicsEffect(self.shadow)  # Apply the shadow effect
         layout.addWidget(self.label)
 
@@ -803,7 +805,8 @@ class FinalScreen(QWidget):
         # Si le pixmap est valide (non nul), on le redimensionne
         if pixmap:
             # Redimensionner l'image pour la rendre plus grande
-            scaled_pixmap = pixmap.scaled(300, 300, Qt.AspectRatioMode.KeepAspectRatio)  # Agrandir l'image à 400x400 tout en gardant le ratio
+            scaled_pixmap = pixmap.scaled(300, 300,
+                                          Qt.AspectRatioMode.KeepAspectRatio)  # Agrandir l'image à 400x400 tout en gardant le ratio
             self.image_label = QLabel(self)  # Créer un QLabel pour afficher l'image
             self.image_label.setPixmap(scaled_pixmap)  # Appliquer l'image redimensionnée au label
             self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrer l'image dans le label
@@ -814,12 +817,10 @@ class FinalScreen(QWidget):
 
         else:
             print("Erreur")  # Si le pixmap est nul, afficher un message d'erreur
-        
+
         # Ajouter les boutons de l'interface avec le même style que les autres écrans
         self.add_buttons(layout)
 
-        self.setLayout(layout)
-    
     def create_neon_frame(self, image_label):
         """Création d'un cadre néon clignotant autour de l'image"""
         self.neon_effect = QGraphicsDropShadowEffect()
@@ -905,8 +906,29 @@ class FinalScreen(QWidget):
         return "history downloaded"
 
     def show_history(self):
-        return "showing history"
-   
+        """Afficher l'historique sous forme de boutons"""
+        # Créer un layout pour l'historique
+        history_layout = QVBoxLayout()  # Nouveau layout pour l'historique
+        history_layout.setSpacing(5)
+
+        # Créer un label pour l'historique
+        history_label = QLabel("History", self)
+        history_label.setFont(QFont("Press Start 2P", 20, QFont.Weight.Bold))
+        history_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        history_label.setStyleSheet("color: white; background: transparent;")
+        history_layout.addWidget(history_label)
+
+        # Ajouter les boutons d'historique
+        for btn in self.history_buttons.values():
+            history_layout.addWidget(btn)
+
+        # Ajouter le layout de l'historique à la fenêtre
+        self.layout().addLayout(history_layout)  # Ajouter à la fenêtre principale
+
+        # Désactiver le bouton "Show history" après affichage pour éviter de l'ajouter plusieurs fois
+        self.show_history_button.setEnabled(
+            False)  # Optionnel, tu peux aussi choisir de cacher ce bouton après l'action
+
     def download_image(self):
         """Télécharger la dernière image sélectionnée sous le nom 'selected portrait'"""
         # Ouvrir une boîte de dialogue pour permettre à l'utilisateur de choisir où enregistrer l'image
@@ -922,7 +944,7 @@ class FinalScreen(QWidget):
         if file_dialog.exec():  # Si l'utilisateur a sélectionné un fichier
             file_path = file_dialog.selectedFiles()[0]  # Récupérer le chemin du fichier sélectionné
             print(f"Chemin sélectionné : {file_path}")  # Afficher le chemin sélectionné pour le débugage
-            
+
             last_image_label = self.selected_images[-1]  # Récupérer la dernière image sélectionnée
             pixmap = last_image_label.pixmap()  # Obtenir le pixmap (image) de cette dernière image
 
@@ -932,9 +954,9 @@ class FinalScreen(QWidget):
                     file_path += '.png'  # Par défaut, on ajoute .png si aucun format n'est spécifié
 
                 print(f"Essayer d'enregistrer l'image à {file_path}")  # Message de débogage avant l'enregistrement
-                
+
                 saved = pixmap.save(file_path)  # Sauvegarder l'image à l'emplacement choisi
-                
+
                 if saved:
                     print(f"L'image a été enregistrée à {file_path}")  # Afficher un message de succès
                     return "Image enregistrée avec succès !"  # Retourner un message de succès
@@ -945,7 +967,8 @@ class FinalScreen(QWidget):
                 print("Aucune image à enregistrer !")  # Afficher un message d'erreur si aucune image n'est disponible
                 return "Aucune image à enregistrer !"  # Retourner un message d'erreur
 
-app = QApplication(sys.argv)
-window = WelcomeScreen()
-window.show()
-sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = WelcomeScreen()
+    window.show()
+    sys.exit(app.exec())
