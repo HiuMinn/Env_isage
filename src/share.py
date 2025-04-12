@@ -35,9 +35,9 @@ def add_to_tmp(img, j):
 
     name = f"img{j+1}"
 
-    destination = os.path.join(TMP_DIR,f"{name}.png")
+    destination = os.path.join(TMP_DIR,f"{name}.jpg")
     shutil.copy(source, destination)
-    return os.path.join(TMP_DIR,f"{name}.png") #name
+    return os.path.join(TMP_DIR,f"{name}.jpg") #name
 
 def clear_tmp():
     """
@@ -100,7 +100,7 @@ def generate_img(l_of_one_img_name, var=0.2):
     start = len(DICT_LATENT)
     for i,vec in enumerate(l_vec_son):
         img = ae.decode(vec)
-        file_name = os.path.join(TMP_DIR, f"img{start+i+1}.png")
+        file_name = os.path.join(TMP_DIR, f"img{start+i+1}.jpg")
         ae.save_image( img,file_name,path="")
         add_to_dict(file_name,vec)
 
@@ -116,7 +116,7 @@ def combine_img(l_of_img_names,var_bruit = 0.25,var_fusion= 0.65):
     start = len(DICT_LATENT)
     for i,vec in enumerate(l_vec_son):
         img = ae.decode(vec)
-        file_name = file_name = os.path.join(TMP_DIR, f"img{start+i+1}.png")
+        file_name = file_name = os.path.join(TMP_DIR, f"img{start+i+1}.jpg")
         ae.save_image(img,file_name,path="")
         add_to_dict(file_name,vec)
 
