@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append("./interface_graphique/")
-from interface_graphique import test8 as ig
+from interface_graphique import test_10 as ig
 import share
 if __name__=='__main__':
 

@@ -95,7 +95,6 @@ def generate_img(l_of_one_img_name, var=0.5):
     :param var:
     :return:
     """
-    print(DICT_LATENT)
     parent = [DICT_LATENT[l_of_one_img_name[0]]]
     l_vec_son = ag.bruitage([val for val in parent for _ in range(4)], sigma = var) #appliquer la mutation a 4 enfants d'image choisi
     start = len(DICT_LATENT)
