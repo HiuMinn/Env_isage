@@ -311,7 +311,7 @@ class MainScreen(QWidget):
         self.grid_layout = QGridLayout()
         self.grid_layout.setSpacing(5)
 
-        self.image_paths = [os.path.join(self.tmp,f"img{i}.png") for i in range(1, 21)]
+        self.image_paths = [os.path.join(self.tmp,f"img{i}.jpg") for i in range(1, 21)]
         self.image_size = 150
         self.row, self.col = 0, 0
         self.image_labels = []  
@@ -554,7 +554,7 @@ class PortraitWorkspace(QWidget):
         """Retourne les 4 dernières images (ordre brut du dossier) sous forme {QPushButton: QIcon}"""
 
         def extract_index(filename):
-            match = re.search(r'img(\d+)\.png', filename)
+            match = re.search(r'img(\d+)\.jpg', filename)
             return int(match.group(1)) if match else -1
         if not os.path.exists(tmp):
             raise ValueError("Image introuvable")
@@ -991,7 +991,7 @@ class FinalScreen(QWidget):
             pixmap = button.icon().pixmap(300, 300)  # Récupère le pixmap de l'icône du bouton
 
             if pixmap and not pixmap.isNull():
-                file_name = f"image_{index}.png"
+                file_name = f"image_{index}.jpg"
                 file_path = os.path.join(history_folder, file_name)
 
                 if pixmap.save(file_path):
@@ -1044,7 +1044,7 @@ class FinalScreen(QWidget):
         file_dialog.setViewMode(QFileDialog.ViewMode.List)  # Affichage sous forme de liste
 
         # Définir le nom par défaut du fichier
-        default_file_name = "selected portrait.png"
+        default_file_name = "selected_portrait.jpg"
         file_dialog.selectFile(default_file_name)  # Définir le nom par défaut dans la boîte de dialogue
 
         if file_dialog.exec():  # Si l'utilisateur a sélectionné un fichier
@@ -1057,7 +1057,7 @@ class FinalScreen(QWidget):
             if pixmap:  # Si le pixmap est valide
                 # Vérification du format de fichier
                 if not file_path.endswith(('.png', '.xpm', '.jpg')):  # Si le format du fichier n'est pas correct
-                    file_path += '.png'  # Par défaut, on ajoute .png si aucun format n'est spécifié
+                    file_path += '.jpg'  # Par défaut, on ajoute .png si aucun format n'est spécifié
 
                 print(f"Essayer d'enregistrer l'image à {file_path}")  # Message de débogage avant l'enregistrement
                 
