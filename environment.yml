@@ -9,7 +9,7 @@ dependencies:
   - pytorch
   - torchvision
   - torchaudio
-  - PyQt6
+  - pyqt = 6
   - matplotlib
   - scikit-learn
   - pip
