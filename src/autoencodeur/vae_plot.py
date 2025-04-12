@@ -17,7 +17,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  # Normalisation utilisée lors de l'entraînement
 ])
 
-def encode(image_path, model=r"./src/autoencodeur/vae_final.pth"):
+def encode(image_path, model=r"./src/autoencodeur/vae_epoch_430.pth"):
     """
     Encodes the input vector using the VAE model.
 
@@ -40,7 +40,7 @@ def encode(image_path, model=r"./src/autoencodeur/vae_final.pth"):
         z, _, _ = vae_net.encoder(image)  # Récupérez z, mu, et logvar
     return z
 
-def decode(z, model=r"./src/autoencodeur/vae_final.pth"):
+def decode(z, model=r"./src/autoencodeur/vae_epoch_430.pth"):
     """
     Decodes the input vector using the VAE model.
 

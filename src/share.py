@@ -88,7 +88,7 @@ def replace_20_first_img_in_directory(nb=20):
         add_to_dict(i,ae.encode(i))
 
 
-def generate_img(l_of_one_img_name, var=0.5):
+def generate_img(l_of_one_img_name, var=0.2):
     """
 
     :param l_of_one_img_name:
@@ -104,7 +104,7 @@ def generate_img(l_of_one_img_name, var=0.5):
         ae.save_image( img,file_name,path="")
         add_to_dict(file_name,vec)
 
-def combine_img(l_of_img_names,var_bruit = 0.2,var_fusion= 0.5):
+def combine_img(l_of_img_names,var_bruit = 0.25,var_fusion= 0.65):
     """
 
     :param l_of_img_names:
