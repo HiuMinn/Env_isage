@@ -12,6 +12,7 @@ dependencies:
   - pyqt = 6
   - matplotlib
   - scikit-learn
+  - sphinx_rtd_theme
   - pip
   - pip:
       - requests

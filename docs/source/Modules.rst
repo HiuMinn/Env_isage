@@ -1,7 +1,10 @@
-projet_4BIM
-===========
+Modules
+=======
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
+   :caption: Modules disponibles
 
-   main_algorithme_genetique
+   al_matrice
+   vae_plot
+   share

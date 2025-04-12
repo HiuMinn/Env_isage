@@ -22,6 +22,5 @@ offre une approche innovante pour assister les forces de l’ordre dans leurs in
    :caption: Contenu de la documentation
 
    Installation
-   Utilisation
    Modules
 

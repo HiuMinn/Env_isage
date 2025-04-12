@@ -15,10 +15,10 @@ release = '0.0.1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../../interface_graphique'))
-sys.path.insert(0, os.path.abspath('../../algorithme_genetique'))
-sys.path.insert(0, os.path.abspath('../../autoencodeur'))
+sys.path.insert(0, os.path.abspath('../../src'))
+sys.path.insert(0, os.path.abspath('../../src/interface_graphique'))
+sys.path.insert(0, os.path.abspath('../../src/algorithme_genetique'))
+sys.path.insert(0, os.path.abspath('../../src/autoencodeur'))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode', #lien direct vers le code source
