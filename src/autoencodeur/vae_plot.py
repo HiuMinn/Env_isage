@@ -41,6 +41,13 @@ def encode(image_path, model=r"./src/autoencodeur/vae_final.pth"):
     return z
 
 def decode(z, model=r"./src/autoencodeur/vae_final.pth"):
+    """
+    Decodes the input vector using the VAE model.
+
+    :param z: Input vector to be decoded.
+    :param model: VAE model used for decoding.
+    :return: Decoded vector.
+    """
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     vae_net = vae.VAE(channels=3).to(device)
