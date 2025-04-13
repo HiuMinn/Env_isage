@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
-    <link rel="next" title="Mode d’emploi" href="Utilisation.html" />
+    <link rel="next" title="Modules" href="Modules.html" />
     <link rel="prev" title="En-visage documentation" href="index.html" /> 
 </head>
 
@@ -45,9 +45,15 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contenu de la documentation</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Utilisation.html">Mode d’emploi</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Modules.html">projet_4BIM</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#decompresser-l-archive">1. Décompresser l’archive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aller-dans-le-dossier-du-logiciel">2. Aller dans le dossier du logiciel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creer-l-environnement-conda">3. Créer l’environnement Conda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#activer-lenvironnement">4. Activer l’environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lancer-le-logiciel">5. Lancer le logiciel</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
 </ul>
 
         </div>
@@ -76,24 +82,56 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Lien vers cette rubrique"></a></h1>
-<p>Voici comment installer <strong>Envisage</strong> :</p>
-<ol class="arabic">
-<li><p>Créez l’environnement conda :</p>
+<p>Voici les étapes pour installer et exécuter le logiciel.</p>
+<section id="decompresser-l-archive">
+<h2>1. Décompresser l’archive<a class="headerlink" href="#decompresser-l-archive" title="Lien vers cette rubrique"></a></h2>
+<p>Ouvre un terminal, place-toi dans le dossier contenant le fichier <cite>.tar.gz</cite> et tape :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar<span class="w"> </span>-xzf<span class="w"> </span>envisage-0.0.1.tar.gz
+</pre></div>
+</div>
+</section>
+<section id="aller-dans-le-dossier-du-logiciel">
+<h2>2. Aller dans le dossier du logiciel<a class="headerlink" href="#aller-dans-le-dossier-du-logiciel" title="Lien vers cette rubrique"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>envisage-0.0.1
+</pre></div>
+</div>
+</section>
+<section id="creer-l-environnement-conda">
+<h2>3. Créer l’environnement Conda<a class="headerlink" href="#creer-l-environnement-conda" title="Lien vers cette rubrique"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml
 </pre></div>
 </div>
+<p>Sinon, lancer le script d’initialisation correspondant à votre système :</p>
+<ul>
+<li><p><strong>Pour Linux</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./linux_initialisation.sh
+</pre></div>
+</div>
 </li>
-<li><p>Activez l’environnement :</p>
+<li><p><strong>Pour macOS</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./mac_initialisation.zsh
+</pre></div>
+</div>
+</li>
+<li><p><strong>Pour Windows</strong> (via PowerShell) :</p>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="p">./</span><span class="n">windows_initialisation</span><span class="p">.</span><span class="n">ps1</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="activer-lenvironnement">
+<h2>4. Activer l’environnement<a class="headerlink" href="#activer-lenvironnement" title="Lien vers cette rubrique"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>env_isage
 </pre></div>
 </div>
-</li>
-<li><p>Installez le package localement :</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</section>
+<section id="lancer-le-logiciel">
+<h2>5. Lancer le logiciel<a class="headerlink" href="#lancer-le-logiciel" title="Lien vers cette rubrique"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>src/main.py
 </pre></div>
 </div>
-</li>
-</ol>
+</section>
 </section>
 
 
@@ -101,7 +139,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
         <a href="index.html" class="btn btn-neutral float-left" title="En-visage documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
-        <a href="Utilisation.html" class="btn btn-neutral float-right" title="Mode d’emploi" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Modules.html" class="btn btn-neutral float-right" title="Modules" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

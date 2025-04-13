@@ -1,13 +1,8 @@
 import sys
+import os
 
-import torch
-
-
-sys.path.append("./autoencodeur/")
-sys.path.append("./algorithme_genetique/")
-
-import numpy as np
-from PIL import Image
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),"autoencodeur"))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),"algorithme_genetique"))
 
 from algorithme_genetique import al_matrice as ag
 
@@ -25,7 +20,7 @@ def get_one_img():
     récupère aléatoirement un image dans le fichier data
     :return:
     """
-    file = os.listdir("./src/data")
+    file = os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)),"data"))
     #file = os.listdir("D:/Users/elisa/INFO7_BS/datasets/celeba_filtered")
     chosen_img = random.choice(file)
     return chosen_img
@@ -48,7 +43,7 @@ def clear_tmp():
     Vider les images dans tmp
     :return: None
     """
-    folder = "./src/tmp/"
+    folder = os.path.join(os.path.dirname(os.path.abspath(__file__)),"tmp")
     for file in os.listdir(folder):
         file_path = os.path.join(folder, file)
         os.remove(file_path)

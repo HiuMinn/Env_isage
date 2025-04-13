@@ -21,3 +21,12 @@ license-files = ["LICEN[CS]E*"]
 
 [project.urls]
 Homepage = "https://gitlab.insa-lyon.fr/gdupontbur/projet-4bim"
+
+[tool.setuptools]
+packages = ["src","src.algorithme_genetique","src.interface_graphique"]
+include-package-data = true
+
+
+[project.scripts]
+envisage = "src.main:main"
+
