@@ -8,10 +8,18 @@ Son fonctionnement repose sur un autocencodeur permettant de fusionner et divers
 ## Installation
 
 Le logiciel Env_isage utilise un environnement virtuel conda. 
-Après s'être assuré que conda est bien installé sur sa machine, l'utilisateur peut simplement exécuter dans son terminal un des trois fichiers suivants en fonction de son OS : 
+Après s'être assuré que conda est bien installé sur sa machine, l'utilisateur peut simplement exécuter dans son terminal un des trois fichiers suivants en fonction de son OS :  
 - linux_initialisation.sh
 - mac_initialisation.zsh
 - windows_initialisation.ps1
+
+## Démarage
+
+Pour lancer le logiciel, l'utilisateur peut simplement exécuter dans son terminal un des trois fichiers suivants en fonction de son OS :  
+- connection_disk_linux.sh
+- connection_disk_mac.zsh
+- connection_disk_windows.ps1
+Puis : python src/main.py
 
 ## Auteurs
 
