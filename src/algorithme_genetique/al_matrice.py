@@ -4,6 +4,8 @@ import torch
 
 def fusion_poids_lognormal(l_parents, sigma, nb_fils=4):
     """
+    Fusionner les individus avec des poids tirés suivi par la loi lognormal
+
     :param l_parents: listes des individus choisis pour fusionner
     :type l_parents: array_like
     :param sigma: la variance de la log-normale pour distribuer les poids à des individus (les parents)
@@ -116,7 +118,6 @@ def main_mutation(l_parents, schema, var_fusion=0, var_bruit=0, nb_fils=4):
     :type var_bruit: float
     :param nb_fils: nombre de fils après la fusion et la mutation. Défaut est 4 (nombre d'image à générer)
     :type nb_fils: int
-    ...
     :return: listes des individus fusionnés et mutés
     :rtype: list[array_like]
 

@@ -13,7 +13,7 @@ Après s'être assuré que conda est bien installé sur sa machine, l'utilisateu
 - mac_initialisation.zsh
 - windows_initialisation.ps1
 
-## Démarage
+##  Démarage
 
 Pour lancer le logiciel, l'utilisateur peut simplement exécuter dans son terminal un des trois fichiers suivants en fonction de son OS :  
 - connection_disk_linux.sh

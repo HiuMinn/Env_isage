@@ -8,3 +8,4 @@ Modules
    al_matrice
    vae_plot
    share
+   main_interface_graphique
