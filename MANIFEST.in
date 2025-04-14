@@ -1,3 +1,12 @@
 recursive-include docs *
 recursive-include src *
 include src/tmp/*
+include ./connection_disk_linux.sh
+include ./connection_disk_mac.zsh
+include ./connection_disk_windows.ps1
+
+include ./linux_initialisation.sh
+include ./mac_initialisation.zsh
+include ./windows_initialisation.ps1
+
+include ./*.yml
