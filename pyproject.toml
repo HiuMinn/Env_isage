@@ -1,6 +1,6 @@
 [project]
 name = "Envisage"
-version = "0.0.1"
+version = "1.0.0"
 authors = [
   { name="Lilian Guitart Arnau", email="lilian.guitart-arnau@insa-lyon.fr" },
   { name="Maele Bedel", email="maele.bedel@insa-lyon.fr" },
